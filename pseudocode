@@ -1,0 +1,129 @@
+procedure main
+    display "***** Students Records Management System *****"
+    display "PRESS ENTER KEY TO CONTINUE."
+    wait for user to press Enter
+    call mainmenu()
+
+procedure mainmenu
+    display "***** MAIN MENU *****"
+    display "Enter Your Choice Number."
+    display "1: Add Student Record"
+    display "2: Search Student Record"
+    display "3: Modify Student Record"
+    display "4: View Student Record"
+    display "5: Exit"
+    display "Enter your choice: "
+    input choice
+    switch choice
+        case 1:
+            call addstudent()
+            break
+        case 2:
+            call searchstudent()
+            break
+        case 3:
+            call updatestudent()
+            break
+        case 4:
+            call viewstudent()
+            break
+        case 5:
+            exit program
+            break
+        default:
+            display "Invalid Choice."
+    call mainmenu()
+
+procedure addstudent
+    open file "file.txt" for appending
+    if unable to open file then
+        display "File Not Opening"
+        exit program
+    end if
+    repeat until user wants to add another record
+        display "***** ADD STUDENT RECORD *****"
+        display "Enter Details Of Student."
+        input student_name
+        input id_no
+        input mobile_no
+        input department
+        input cgpa
+        input gender
+        input age
+        write student details to file
+        input another
+    close file
+    call mainmenu()
+
+procedure searchstudent
+    input id_num
+    open file "file.txt" for reading
+    if unable to open file then
+        display "File Not Opening"
+        exit program
+    end if
+    repeat until end of file
+        read student details from file
+        if id_no matches id_num then
+            display student details
+            set found to true
+            exit loop
+        end if
+    end repeat
+    if not found then
+        display "ID Number Not Found."
+    close file
+    call mainmenu()
+
+procedure updatestudent
+    input id_num
+    open file "file.txt" for reading
+    if unable to open file then
+        display "File Not Opening"
+        exit program
+    end if
+    open temporary file "temp.txt" for writing
+    if unable to open temporary file then
+        display "Error! Temporary File Not Possible To Creating"
+        close file
+        exit program
+    end if
+    repeat until end of file
+        read student details from file
+        if id_no matches id_num then
+            input new details
+            set found to true
+        end if
+        write student details to temporary file
+    end repeat
+    close file
+    if not found then
+        display "ID not found."
+        delete temporary file
+    else
+        close temporary file
+        delete original file
+        rename temporary file to original file
+        display "Record Updated Successfully."
+    end if
+    call mainmenu()
+
+procedure viewstudent
+    input searchdep
+    validate searchdep
+    open file "file.txt" for reading
+    if unable to open file then
+        display "Error opening file"
+        exit program
+    end if
+    repeat until end of file
+        read student details from file
+        if department matches searchdep then
+            display student details
+            set found to true
+        end if
+    end repeat
+    if not found then
+        display "No student record found for the entered department."
+    close file
+    call mainmenu()
