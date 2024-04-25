@@ -225,7 +225,7 @@ void viewstudent()
 
     printf("\n***** VIEW STUDENT RECORD *****\n");
 
-    printf("Enter Department (CSE/EEE/BBA/MSJ) To View Details Of Students: \n");
+    printf("Enter Department (BBA/CSE/EEE/MSJ) To View Details Of Students: \n");
     scanf("%s", searchdep);
 
     if (strcmp(searchdep, "CSE") != 0 && strcmp(searchdep, "EEE") != 0 &&
