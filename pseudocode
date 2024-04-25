@@ -1,3 +1,4 @@
+START
 procedure main
     display "***** Students Records Management System *****"
     display "PRESS ENTER KEY TO CONTINUE."
@@ -127,3 +128,4 @@ procedure viewstudent
         display "No student record found for the entered department."
     close file
     call mainmenu()
+END
