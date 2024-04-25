@@ -1,131 +1,150 @@
-START
-procedure main
-    display "***** Students Records Management System *****"
-    display "PRESS ENTER KEY TO CONTINUE."
-    wait for user to press Enter
-    call mainmenu()
+1. Start
 
-procedure mainmenu
-    display "***** MAIN MENU *****"
-    display "Enter Your Choice Number."
-    display "1: Add Student Record"
-    display "2: Search Student Record"
-    display "3: Modify Student Record"
-    display "4: View Student Record"
-    display "5: Exit"
-    display "Enter your choice: "
-    input choice
-    switch choice
-        case 1:
-            call addstudent()
-            break
-        case 2:
-            call searchstudent()
-            break
-        case 3:
-            call updatestudent()
-            break
-        case 4:
-            call viewstudent()
-            break
-        case 5:
-            exit program
-            break
-        default:
-            display "Invalid Choice."
-    call mainmenu()
+2. Display Welcome Message
+   - Print "***** Students Records Management System *****"
+   - Print "PRESS ENTER KEY TO CONTINUE."
+   - Wait for user to press enter
 
-procedure addstudent
-    open file "file.txt" for appending
-    if unable to open file then
-        display "File Not Opening"
-        exit program
-    end if
-    repeat until user wants to add another record
-        display "***** ADD STUDENT RECORD *****"
-        display "Enter Details Of Student."
-        input student_name
-        input id_no
-        input mobile_no
-        input department
-        input cgpa
-        input gender
-        input age
-        write student details to file
-        input another
-    close file
-    call mainmenu()
+3. Call mainmenu() function
 
-procedure searchstudent
-    input id_num
-    open file "file.txt" for reading
-    if unable to open file then
-        display "File Not Opening"
-        exit program
-    end if
-    repeat until end of file
-        read student details from file
-        if id_no matches id_num then
-            display student details
-            set found to true
-            exit loop
-        end if
-    end repeat
-    if not found then
-        display "ID Number Not Found."
-    close file
-    call mainmenu()
+4. Function mainmenu():
+   - Declare choice as integer
 
-procedure updatestudent
-    input id_num
-    open file "file.txt" for reading
-    if unable to open file then
-        display "File Not Opening"
-        exit program
-    end if
-    open temporary file "temp.txt" for writing
-    if unable to open temporary file then
-        display "Error! Temporary File Not Possible To Creating"
-        close file
-        exit program
-    end if
-    repeat until end of file
-        read student details from file
-        if id_no matches id_num then
-            input new details
-            set found to true
-        end if
-        write student details to temporary file
-    end repeat
-    close file
-    if not found then
-        display "ID not found."
-        delete temporary file
-    else
-        close temporary file
-        delete original file
-        rename temporary file to original file
-        display "Record Updated Successfully."
-    end if
-    call mainmenu()
+   - Print "***** MAIN MENU *****"
+   - Print "Enter Your Choice Number."
+   - Print "1: Add Student Record"
+   - Print "2: Search Student Record"
+   - Print "3: Modify Student Record"
+   - Print "4: View Student Record"
+   - Print "5: Exit"
+   - Print "Enter your choice: "
+   - Read choice from user
 
-procedure viewstudent
-    input searchdep
-    validate searchdep
-    open file "file.txt" for reading
-    if unable to open file then
-        display "Error opening file"
-        exit program
-    end if
-    repeat until end of file
-        read student details from file
-        if department matches searchdep then
-            display student details
-            set found to true
-        end if
-    end repeat
-    if not found then
-        display "No student record found for the entered department."
-    close file
-    call mainmenu()
-END
+   - Switch on choice:
+       - Case 1:
+           - Call addstudent() function
+           - Break
+       - Case 2:
+           - Call searchstudent() function
+           - Break
+       - Case 3:
+           - Call updatestudent() function
+           - Break
+       - Case 4:
+           - Call viewstudent() function
+           - Break
+       - Case 5:
+           - Exit the program
+           - Break
+       - Default:
+           - Print "Invalid Choice."
+
+5. Function addstudent():
+   - Declare fp as file pointer
+   - Declare std as struct students
+   - Declare another as character
+
+   - Open "file.txt" in append mode and binary mode
+   - If fp is NULL, print "File Not Opening" and exit program
+
+   - While another is 'y':
+       - Print "***** ADD STUDENT RECORD *****"
+       - Print "Enter Details Of Student."
+
+       - Read student_name, id_no, mobile_no, department, cgpa, gender, and age from user
+
+       - Write std to file
+
+       - Print "If you Want to add another record? Then type 'y' else 'n'."
+       - Read another from user
+
+   - Close file
+
+   - Call mainmenu()
+
+6. Function searchstudent():
+   - Declare fp as file pointer
+   - Declare std as struct students
+   - Declare id_num and found as integers
+
+   - Print "***** SEARCH STUDENT RECORD *****"
+
+   - Read id_num from user
+
+   - Open "file.txt" in read mode and binary mode
+   - If fp is NULL, print "File Not Opening" and exit program
+
+   - While there are records in file:
+       - Read a record into std
+       - If std.id_no is equal to id_num:
+           - Print student details
+           - Set found to 1
+           - Break from loop
+
+   - If found is 0, print "ID Number Not Found."
+
+   - Close file
+
+   - Call mainmenu()
+
+7. Function updatestudent():
+   - Declare id_num and found as integers
+   - Declare fp and temp_fp as file pointers
+   - Declare std as struct students
+
+   - Print "***** UPDATE STUDENT RECORD *****"
+
+   - Read id_num from user
+
+   - Open "file.txt" in read mode and binary mode
+   - If fp is NULL, print "File Not Opening" and exit program
+
+   - Open "temp.txt" in write mode and binary mode
+   - If temp_fp is NULL, print "Error! Temporary File Not Possible To Creating" and exit program
+
+   - While there are records in file:
+       - Read a record into std
+       - If std.id_no is equal to id_num:
+           - Read new CGPA and mobile_no from user
+           - Set found to 1
+
+       - Write std to temp_fp
+
+   - Close fp and temp_fp
+
+   - If found is 0, print "ID not found."
+   - Else, delete "file.txt" and rename "temp.txt" to "file.txt"
+
+   - Print "Record Updated Successfully."
+
+   - Call mainmenu()
+
+8. Function viewstudent():
+   - Declare fp as file pointer
+   - Declare std as struct students
+   - Declare searchdep as string
+   - Declare found and studentCount as integers
+
+   - Print "***** VIEW STUDENT RECORD *****"
+
+   - Read searchdep from user
+
+   - If searchdep is not valid, print "Invalid department code." and return to mainmenu()
+
+   - Open "file.txt" in read mode and binary mode
+   - If fp is NULL, print "Error opening file" and exit program
+
+   - While there are records in file:
+       - Read a record into std
+       - If std.department matches searchdep:
+           - Print student details
+           - Increment studentCount
+           - Set found to 1
+
+   - If found is 0, print "No student record found for the entered department."
+
+   - Close file
+
+   - Call mainmenu()
+
+9. End
